@@ -1,14 +1,25 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const port = process.env.PORT;
+const port = process.env.PORT || 5000;
 
 //middleware
-app.use(cors());
+const corsOptions = {
+  origin: [
+    'http://localhost:5173', // Vite dev server
+    'http://localhost:3000', // Alternative dev port
+    process.env.FRONTEND_URL, // Vercel frontend URL from environment variable
+    /\.vercel\.app$/ // Allow any Vercel app
+  ].filter(Boolean), // Remove undefined values
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
-const uri = "mongodb+srv://trello_db:dVHleCUTmQhewNmQ@cluster0.vxqz6e2.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const uri = process.env.MONGODB_URI || "mongodb+srv://trello_db:dVHleCUTmQhewNmQ@cluster0.vxqz6e2.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 
 const client = new MongoClient(uri, {
