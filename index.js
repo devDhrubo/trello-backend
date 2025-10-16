@@ -90,7 +90,6 @@ async function connectToMongoDB() {
 
 app.post('/cards', async (req, res) => {
   try {
-    // DB connection check
     if (!cardsCollection) {
       return res.status(500).json({
         success: false,
